@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Admin Dashboard — Veerasurya</title>
+    <link rel="icon" href="assets/vs-logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+    <div class="admin-container" id="adminContainer">
+        <!-- Login Form -->
+        <div class="admin-login" id="adminLogin">
+            <img src="assets/vs-logo.svg" alt="VS"
+                style="width:56px;margin:0 auto var(--space-md);border-radius:12px;" />
+            <h2>Admin Access</h2>
+            <p style="color:var(--text-secondary);margin-bottom:var(--space-md);font-size:0.85rem;">
+                Sign in to view contact messages.
+            </p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <input type="text" id="adminUsername" placeholder="Username" required autocomplete="off" />
+                </div>
+                <div class="form-group">
+                    <input type="password" id="adminPassword" placeholder="Password" required />
+                </div>
+                <button type="submit" class="btn btn-primary"
+                    style="width:100%;justify-content:center;margin-top:var(--space-sm);">
+                    Sign In
+                </button>
+            </form>
+            <p id="loginError" style="color:var(--error);font-size:0.82rem;margin-top:var(--space-sm);display:none;">
+            </p>
+            <a href="/"
+                style="display:inline-block;margin-top:var(--space-md);font-size:0.82rem;color:var(--text-muted);">←
+                Back to Portfolio</a>
+        </div>
+
+        <!-- Dashboard (hidden until auth) -->
+        <div class="admin-dashboard" id="adminDashboard">
+            <div class="admin-header">
+                <div>
+                    <h2>Messages</h2>
+                    <p class="message-count" id="messageCount">Loading...</p>
+                </div>
+                <div style="display:flex;gap:var(--space-sm);align-items:center;">
+                    <a href="/" class="btn btn-outline" style="padding:8px 20px;font-size:0.78rem;">← Portfolio</a>
+                    <button class="btn-logout" id="logoutBtn">Sign Out</button>
+                </div>
+            </div>
+            <div id="messagesContainer"></div>
+            <p id="noMessages"
+                style="color:var(--text-muted);text-align:center;display:none;padding:var(--space-xl) 0;">
+                No messages yet. Share your portfolio to start receiving messages!
+            </p>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+
+</html>

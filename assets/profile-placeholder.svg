@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <defs>
+    <linearGradient id="fadeOut" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1a1a" stop-opacity="0"/>
+      <stop offset="70%" stop-color="#1a1a1a" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="skinGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#C5A059" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#D4AF37" stop-opacity="0.15"/>
+    </linearGradient>
+    <clipPath id="silClip">
+      <rect width="400" height="500" rx="20"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#silClip)">
+    <rect width="400" height="500" fill="#0A0A0A"/>
+    <!-- Shoulders -->
+    <ellipse cx="200" cy="520" rx="200" ry="120" fill="#161616"/>
+    <ellipse cx="200" cy="520" rx="200" ry="120" fill="url(#skinGrad)"/>
+    <!-- Neck -->
+    <rect x="165" y="310" width="70" height="80" rx="10" fill="#161616"/>
+    <!-- Head -->
+    <ellipse cx="200" cy="240" rx="90" ry="110" fill="#1e1e1e"/>
+    <ellipse cx="200" cy="240" rx="90" ry="110" fill="url(#skinGrad)"/>
+    <!-- Fade bottom -->
+    <rect width="400" height="500" fill="url(#fadeOut)"/>
+    <!-- Gold border glow -->
+    <rect x="2" y="2" width="396" height="496" rx="19" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.2"/>
+  </g>
+</svg>
