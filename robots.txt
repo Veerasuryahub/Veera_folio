@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://veera-folio.vercel.app/sitemap.xml
