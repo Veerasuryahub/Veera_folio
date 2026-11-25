@@ -1,14 +1,21 @@
-# Vercel and Firebase local state
+# Local deployment and legacy Firebase CLI state
 .vercel/
 .firebase/
 
-# Dependencies and local environment
+# Dependencies and environment files
 node_modules/
 .env
 .env.*
 !.env.example
 
-# Logs and operating-system files
+# Private credentials and local keys
+*.pem
+*.key
+*service-account*.json
+*serviceaccount*.json
+
+# Logs, coverage and operating-system files
 *.log
+coverage/
 .DS_Store
 Thumbs.db
