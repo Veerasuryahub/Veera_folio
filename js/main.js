@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         menuOverlay.classList.toggle('active', isOpen);
         burger.setAttribute('aria-expanded', String(isOpen));
         mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+        mobileMenu.inert = !isOpen;
         document.body.style.overflow = isOpen ? 'hidden' : '';
     };
 
