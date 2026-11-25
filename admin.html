@@ -23,10 +23,12 @@
             </p>
             <form id="loginForm">
                 <div class="form-group">
-                    <input type="text" id="adminUsername" placeholder="Username" required autocomplete="off" />
+                    <label class="sr-only" for="adminUsername">Admin email address</label>
+                    <input type="email" id="adminUsername" placeholder="Admin email address" required autocomplete="username" />
                 </div>
                 <div class="form-group">
-                    <input type="password" id="adminPassword" placeholder="Password" required />
+                    <label class="sr-only" for="adminPassword">Password</label>
+                    <input type="password" id="adminPassword" placeholder="Password" required autocomplete="current-password" />
                 </div>
                 <button type="submit" class="btn btn-primary"
                     style="width:100%;justify-content:center;margin-top:var(--space-sm);">
@@ -61,7 +63,7 @@
     </div>
 
     <!-- Toast -->
-    <div class="toast" id="toast"></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
