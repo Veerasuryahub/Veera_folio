@@ -13,7 +13,7 @@ import { supabase } from './supabase-client.js';
     const message = document.getElementById('contactMessage').value.trim();
     const honeypot = document.getElementById('contactWebsite').value.trim();
     if (honeypot) { form.reset(); toast('Message sent successfully!', 'success'); return; }
-    if (!name || name.length > 80 || !email || email.length > 254 || !message || message.length > 4000 || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+    if (!name || name.length > 80 || !email || email.length > 254 || !message || message.length > 4000 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       toast('Please check your name, email address, and message.', 'error'); return;
     }
     submitBtn.disabled = true; submitBtn.textContent = 'Sending...';
