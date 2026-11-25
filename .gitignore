@@ -1,1 +1,14 @@
-.vercel
+# Vercel and Firebase local state
+.vercel/
+.firebase/
+
+# Dependencies and local environment
+node_modules/
+.env
+.env.*
+!.env.example
+
+# Logs and operating-system files
+*.log
+.DS_Store
+Thumbs.db
