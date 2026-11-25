@@ -8,7 +8,7 @@ A responsive personal portfolio website for **Veerasurya A**, Assistant System E
 
 ## Overview
 
-This lightweight static portfolio is built with HTML, CSS and vanilla JavaScript. It is deployed on Vercel and uses Firebase Authentication and Cloud Firestore for the private admin inbox and public contact form.
+This lightweight static portfolio is built with HTML, CSS and vanilla JavaScript. It is deployed on Vercel and uses Supabase Authentication and PostgreSQL for the private admin inbox and public contact form.
 
 The website presents professional experience, education, technical skills, selected personal projects, certifications and contact information. TCS experience is described as a training and learning role; it does not claim an unassigned TCS project.
 
@@ -19,8 +19,8 @@ The website presents professional experience, education, technical skills, selec
 - Project category filters: Full Stack, AI & Data, and Web Apps.
 - Accessible mobile navigation, keyboard focus styles and reduced-motion support.
 - SEO metadata, Open Graph/Twitter previews, canonical URL, robots.txt and sitemap.xml.
-- Contact form submissions stored in Cloud Firestore.
-- Private admin inbox protected by Firebase Authentication and Firestore security rules.
+- Contact form submissions stored in Supabase PostgreSQL with Row Level Security (RLS).
+- Private admin inbox protected by Supabase Auth and database RLS policies.
 - Vercel response security headers and static-asset caching.
 
 ## Technology stack
@@ -31,7 +31,7 @@ The website presents professional experience, education, technical skills, selec
 | Styling | CSS3, responsive Grid and Flexbox |
 | Interactions | Vanilla JavaScript (ES6+) |
 | Fonts | Google Fonts — Inter and Playfair Display |
-| Contact form / inbox | Firebase Authentication, Cloud Firestore |
+| Contact form / inbox | Supabase Auth, PostgreSQL, Row Level Security |
 | Hosting / deployment | Vercel + GitHub integration |
 
 ## Repository structure
@@ -47,7 +47,7 @@ Veera_folio/
 ├── css/
 │   └── style.css              # Styles and responsive layout
 ├── js/
-│   ├── admin.js               # Firebase Auth and admin inbox
+│   ├── admin.js               # Supabase Auth and admin inbox
 │   ├── contact.js             # Contact form validation and submission
 │   ├── firebase-config.js     # Public Firebase web-app configuration
 │   └── main.js                # Navigation, reveal effects and project filters
@@ -79,44 +79,55 @@ This is a static site; no Node.js build step is required.
 
 3. Open http://localhost:8000 in your browser.
 
-You can also use the VS Code Live Server extension. Firebase-backed contact submissions and admin sign-in require a configured Firebase project.
+You can also use the VS Code Live Server extension. Supabase-backed contact submissions and admin sign-in require the Supabase project and an owner Auth user to be configured.
 
-## Firebase setup
+## Supabase setup
 
-### 1. Configure the web app
+The production portfolio backend is configured to use the Supabase project:
 
-1. Open the Firebase project console for the portfolio.
-2. Confirm that the web app configuration in `js/firebase-config.js` matches the intended Firebase project.
-3. The Firebase web API key in this file is a browser identifier, not an admin secret. Restrict it in Google Cloud to the portfolio domains and only the APIs the app needs.
-4. Enable **Authentication → Sign-in method → Email/Password**.
-5. Enable Cloud Firestore.
-
-### 2. Create the admin account
-
-Create and verify the portfolio owner's Firebase Authentication user:
-
+- **Project:** `veera-portfolio`
+- **Region:** Mumbai (`ap-south-1`)
+- **Project URL:** `https://xmqdfvlsyckqbyeqagig.supabase.co`
 - **Admin email:** `veerasurya39@gmail.com`
-- Use a new, unique password stored in a password manager.
-- Verify the email address before using the admin page.
 
-No admin password is stored in this repository. The admin UI signs in through Firebase Authentication, and the Firestore rules only permit the verified admin email to read contact messages.
+### 1. Create the owner account
 
-### 3. Deploy Firestore rules and indexes
+In the Supabase Dashboard, open **Authentication → Users → Add user** and invite or create the owner account using the admin email above. Set a unique password and verify the email. Public sign-ups should remain disabled; do not expose an open registration flow.
 
-Install and authenticate the Firebase CLI, then select the correct Firebase project:
+### 2. Configure Auth redirect URLs
 
-```bash
-npm install -g firebase-tools
-firebase login
-firebase use --add
-firebase deploy --only firestore:rules,firestore:indexes
-```
+In **Authentication → URL Configuration**:
 
-**Important:** A GitHub/Vercel deployment does not automatically publish Firestore rules. Deploy the rules to Firebase using the command above. Until the updated rules are deployed, the live Firestore database continues to use its previously published rules.
+- Set the Site URL to `https://veera-folio.vercel.app`.
+- Add `https://veera-folio.vercel.app/admin.html` to the allowed redirect URLs.
+- If using a Vercel preview deployment, add that exact preview origin only when needed for testing.
 
-### 4. Recommended abuse protection
+The admin page includes a **Forgot password?** action. Password reset emails return to `/admin.html`, where the new password can be set.
 
-Enable Firebase App Check for the web app (for example, reCAPTCHA Enterprise) and enforce it for Cloud Firestore after testing. The contact form includes basic validation and a honeypot field, but those measures alone are not a substitute for server-side abuse protection.
+### 3. Database security
+
+The `public.contact_messages` table is created with:
+
+- Row Level Security enabled.
+- Anonymous users may insert validated contact messages only.
+- Only the authenticated owner email `veerasurya39@gmail.com` may read, update or delete messages.
+- No public read policy exists.
+
+The browser uses the Supabase **publishable** key in `js/supabase-client.js`. Never place a Supabase `service_role` or secret key in frontend code or GitHub.
+
+### 4. Existing Firebase data
+
+The old Firebase project and its data have not been deleted. Existing Firestore messages have not been copied automatically; keep Firebase intact until you decide whether any historical messages need exporting and importing. The old Firebase configuration file is no longer loaded by the website.
+
+### 5. Local testing
+
+Run a static server as described above, then test:
+- Submit a contact form message.
+- Sign in to `/admin.html` with the owner Auth account.
+- Mark a message read/unread and delete a test message.
+- Use the password reset flow.
+
+Basic validation and a honeypot are included. For stronger spam protection, add a server-verified CAPTCHA or rate-limited Edge Function before the form receives significant public traffic.
 
 ## Deploy to Vercel
 
@@ -141,7 +152,7 @@ The repository is connected to the Vercel project `veera-folio`.
 - Add TCS project work only after actual project allocation and delivery.
 - Add project screenshots, live demos and concise case studies when available.
 - Keep project links and certificates valid.
-- Re-test the contact form and admin inbox after changing Firebase rules.
+- Re-test the contact form, admin inbox and password reset flow after changing Supabase Auth or RLS settings.
 - Check mobile layout, keyboard navigation and reduced-motion behavior before major releases.
 
 ---
