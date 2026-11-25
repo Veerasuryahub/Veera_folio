@@ -27,10 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuOverlay = document.getElementById('menuOverlay');
 
     const toggleMenu = () => {
-        burger.classList.toggle('active');
-        mobileMenu.classList.toggle('active');
-        menuOverlay.classList.toggle('active');
-        document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        const isOpen = mobileMenu.classList.toggle('active');
+        burger.classList.toggle('active', isOpen);
+        menuOverlay.classList.toggle('active', isOpen);
+        burger.setAttribute('aria-expanded', String(isOpen));
+        mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+        document.body.style.overflow = isOpen ? 'hidden' : '';
     };
 
     if (burger) burger.addEventListener('click', toggleMenu);
@@ -71,6 +73,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
     window.addEventListener('scroll', trackActive, { passive: true });
+
+    /* ---------- Project Filters ---------- */
+    const filterButtons = document.querySelectorAll('.project-filter');
+    const projectCards = document.querySelectorAll('.project-card[data-category]');
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const filter = button.dataset.filter;
+            filterButtons.forEach(item => {
+                const active = item === button;
+                item.classList.toggle('is-active', active);
+                item.setAttribute('aria-pressed', String(active));
+            });
+            projectCards.forEach(card => {
+                card.hidden = filter !== 'all' && card.dataset.category !== filter;
+            });
+        });
+    });
 
     /* ---------- Scroll Reveal ---------- */
     const revealObserver = new IntersectionObserver((entries) => {
