@@ -81,10 +81,10 @@ import { supabase } from './supabase-client.js';
     resetForm.reset(); resetPanel.style.display='none'; notify('Password updated successfully.','success');
   });
   logoutBtn.addEventListener('click',async()=>{await supabase.auth.signOut();showLogin();notify('Signed out.','success');});
-  supabase.auth.onAuthStateChange(async(event,session)=>{
+  supabase.auth.onAuthStateChange((event,session)=>{
     if(event==='PASSWORD_RECOVERY'){resetPanel.style.display='block';showLogin();return;}
     const user=session&&session.user;
-    if(user&&user.email===ADMIN_EMAIL){showDashboard();await loadMessages();}
-    else{if(user) await supabase.auth.signOut();showLogin();}
+    if(user&&user.email===ADMIN_EMAIL){showDashboard();window.setTimeout(()=>loadMessages(),0);}
+    else{if(user) window.setTimeout(()=>supabase.auth.signOut(),0);showLogin();}
   });
 })();
