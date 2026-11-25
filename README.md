@@ -1,68 +1,68 @@
 # Veerasurya — Personal Portfolio
 
-A responsive personal portfolio website for **Veerasurya A**, Assistant System Engineer Trainee at Tata Consultancy Services (TCS), with a Computer Science background and full-stack development experience.
+A responsive personal portfolio for **Veerasurya A**, Assistant System Engineer – Trainee at Tata Consultancy Services (TCS), with a Computer Science background and hands-on full-stack development experience.
 
-🌐 **Live website:** https://veera-folio.vercel.app/  
-💻 **GitHub:** https://github.com/Veerasuryahub  
-🔗 **LinkedIn:** https://www.linkedin.com/in/link2veera/
+- **Live portfolio:** https://veera-folio.vercel.app/
+- **GitHub:** https://github.com/Veerasuryahub
+- **LinkedIn:** https://www.linkedin.com/in/link2veera/
 
 ## Overview
 
-This lightweight static portfolio is built with HTML, CSS and vanilla JavaScript. It is deployed on Vercel and uses Supabase Authentication and PostgreSQL for the private admin inbox and public contact form.
+This is a lightweight static website built with HTML, CSS and vanilla JavaScript. It is deployed on Vercel and uses **Supabase Authentication and PostgreSQL** for the private admin inbox and public contact form.
 
-The website presents professional experience, education, technical skills, selected personal projects, certifications and contact information. TCS experience is described as a training and learning role; it does not claim an unassigned TCS project.
+The portfolio includes professional experience, education, technical skills, selected personal projects, certifications and contact information. TCS experience is accurately presented as a trainee and learning role; no unassigned TCS project is claimed.
 
 ## Features
 
-- Responsive layout for desktop, tablet and mobile.
-- Hero, About, Experience, Education, Skills, Projects, Certifications and Contact sections.
-- Project category filters: Full Stack, AI & Data, and Web Apps.
-- Accessible mobile navigation, keyboard focus styles and reduced-motion support.
+- Responsive portfolio layout for desktop, tablet and mobile.
+- About, Experience, Education, Skills, Projects, Certifications and Contact sections.
+- Project filters for Full Stack, AI & Data, and Web Apps.
+- Accessible navigation, keyboard focus styles and reduced-motion support.
 - SEO metadata, Open Graph/Twitter previews, canonical URL, robots.txt and sitemap.xml.
-- Contact form submissions stored in Supabase PostgreSQL with Row Level Security (RLS).
-- Private admin inbox protected by Supabase Auth and database RLS policies.
+- Contact form with client-side validation and a honeypot field.
+- Supabase-backed contact message storage with Row Level Security (RLS).
+- Admin sign-in, private inbox, unread status, message deletion and password reset.
 - Vercel response security headers and static-asset caching.
 
-## Technology stack
+## Technology
 
 | Area | Technology |
 |---|---|
 | Structure | HTML5 |
-| Styling | CSS3, responsive Grid and Flexbox |
-| Interactions | Vanilla JavaScript (ES6+) |
+| Styling | CSS3, Grid and Flexbox |
+| Interactions | Vanilla JavaScript (ES modules) |
 | Fonts | Google Fonts — Inter and Playfair Display |
-| Contact form / inbox | Supabase Auth, PostgreSQL, Row Level Security |
-| Hosting / deployment | Vercel + GitHub integration |
+| Backend | Supabase Auth and PostgreSQL |
+| Security | Supabase Row Level Security |
+| Hosting | Vercel, connected to GitHub |
 
 ## Repository structure
 
 ```text
 Veera_folio/
 ├── index.html                 # Main portfolio page
-├── admin.html                 # Admin sign-in and inbox UI
+├── admin.html                 # Private admin sign-in and inbox UI
 ├── assets/
 │   ├── profile.png            # Profile photograph
 │   ├── profile-placeholder.svg
 │   └── vs-logo.svg            # Brand mark / favicon
 ├── css/
-│   └── style.css              # Styles and responsive layout
+│   └── style.css              # Responsive styles
 ├── js/
-│   ├── admin.js               # Supabase Auth and admin inbox
+│   ├── admin.js               # Supabase Auth and inbox operations
 │   ├── contact.js             # Contact form validation and submission
-│   ├── firebase-config.js     # Public Firebase web-app configuration
-│   └── main.js                # Navigation, reveal effects and project filters
-├── firestore.rules            # Firestore access-control rules
-├── firestore.indexes.json     # Firestore index configuration
-├── firebase.json              # Firebase CLI configuration
-├── vercel.json                # Vercel rewrites and response headers
+│   ├── main.js                # Navigation, reveal effects and filters
+│   └── supabase-client.js     # Public Supabase URL and publishable key
 ├── robots.txt                 # Search crawler rules
 ├── sitemap.xml                # Public page sitemap
+├── vercel.json                # Rewrites and response headers
+├── .gitignore
 └── README.md
 ```
 
 ## Run locally
 
-This is a static site; no Node.js build step is required.
+No build step or package installation is required.
 
 1. Clone the repository:
 
@@ -71,89 +71,71 @@ This is a static site; no Node.js build step is required.
    cd Veera_folio
    ```
 
-2. Start a local static server from the repository root:
+2. Start a local static server:
 
    ```bash
    python -m http.server 8000
    ```
 
-3. Open http://localhost:8000 in your browser.
+3. Open http://localhost:8000.
 
-You can also use the VS Code Live Server extension. Supabase-backed contact submissions and admin sign-in require the Supabase project and an owner Auth user to be configured.
+Supabase-backed contact submissions and admin sign-in require the configured Supabase project and an authorized admin Auth account.
 
-## Supabase setup
+## Supabase configuration
 
-The production portfolio backend is configured to use the Supabase project:
+The production site connects to the Supabase project **veera-portfolio** in the Mumbai region.
 
-- **Project:** `veera-portfolio`
-- **Region:** Mumbai (`ap-south-1`)
-- **Project URL:** `https://xmqdfvlsyckqbyeqagig.supabase.co`
-- **Admin email:** `veerasurya39@gmail.com`
+- Project URL: `https://xmqdfvlsyckqbyeqagig.supabase.co`
+- Browser key: Supabase publishable key in `js/supabase-client.js`
+- Admin sign-in email: `veerasurya39@gmail.com`
 
-### 1. Create the owner account
+The publishable key is intended for browser use. **Never put a Supabase secret or service-role key, database password, or admin password in this repository.**
 
-In the Supabase Dashboard, open **Authentication → Users → Add user** and invite or create the owner account using the admin email above. Set a unique password and verify the email. Public sign-ups should remain disabled; do not expose an open registration flow.
+### Database and access
 
-### 2. Configure Auth redirect URLs
+The website uses the `public.contact_messages` table. Row Level Security is enabled.
 
-In **Authentication → URL Configuration**:
+- Anonymous and authenticated visitors can insert validated contact messages.
+- Only the authorized portfolio owner account can read, update or delete messages.
+- Public visitors cannot read the inbox.
+- The admin UI additionally checks the signed-in email before showing the dashboard.
 
-- Set the Site URL to `https://veera-folio.vercel.app`.
-- Add `https://veera-folio.vercel.app/admin.html` to the allowed redirect URLs.
-- If using a Vercel preview deployment, add that exact preview origin only when needed for testing.
+The current insert policy validates name, email and message lengths. Client-side validation and a honeypot are basic spam controls, not a substitute for server-side rate limiting or CAPTCHA. Consider adding a server-verified anti-spam control if submission abuse becomes an issue.
 
-The admin page includes a **Forgot password?** action. Password reset emails return to `/admin.html`, where the new password can be set.
+### Admin account and password reset
 
-### 3. Database security
+The owner account is managed in Supabase Dashboard → Authentication → Users. Public user registration should remain disabled. Use the **Forgot password?** action on `/admin.html` to request a reset email.
 
-The `public.contact_messages` table is created with:
+In Supabase Dashboard → Authentication → URL Configuration:
 
-- Row Level Security enabled.
-- Anonymous users may insert validated contact messages only.
-- Only the authenticated owner email `veerasurya39@gmail.com` may read, update or delete messages.
-- No public read policy exists.
+- Site URL: `https://veera-folio.vercel.app`
+- Add `https://veera-folio.vercel.app/admin.html` to allowed redirect URLs.
+- Add a local or Vercel preview URL only when you need to test that exact origin.
 
-The browser uses the Supabase **publishable** key in `js/supabase-client.js`. Never place a Supabase `service_role` or secret key in frontend code or GitHub.
+Use a unique password and keep it in a password manager, not in GitHub.
 
-### 4. Existing Firebase data
+### Legacy Firebase project
 
-The old Firebase project and its data have not been deleted. Existing Firestore messages have not been copied automatically; keep Firebase intact until you decide whether any historical messages need exporting and importing. The old Firebase configuration file is no longer loaded by the website.
+The portfolio frontend now uses Supabase. Old Firebase configuration and CLI files have been removed from this repository to avoid confusion. The separate Firebase project and any historical Firestore data have **not** been deleted. Export or migrate any old messages you still need before making changes to that Firebase project.
 
-### 5. Local testing
+## Deployment
 
-Run a static server as described above, then test:
-- Submit a contact form message.
-- Sign in to `/admin.html` with the owner Auth account.
-- Mark a message read/unread and delete a test message.
-- Use the password reset flow.
-
-Basic validation and a honeypot are included. For stronger spam protection, add a server-verified CAPTCHA or rate-limited Edge Function before the form receives significant public traffic.
-
-## Deploy to Vercel
-
-The repository is connected to the Vercel project `veera-folio`.
+The GitHub repository is connected to the Vercel project `veera-folio`.
 
 - Push changes to `main` to trigger a production deployment.
 - Vercel serves the static site from the repository root.
-- `vercel.json` configures the `/admin` rewrite, security headers and asset caching.
-- Verify the latest deployment in the Vercel dashboard after each release.
-
-## Security notes
-
-- Never commit Firebase service-account JSON, private keys, admin passwords, access tokens or `.env` files.
-- The Firebase browser API key is visible to visitors by design; secure access with Firebase Authentication, Firestore rules, API-key restrictions and App Check.
-- Firestore allows unauthenticated visitors to create only validated contact messages. Only the verified owner account can read them.
-- The admin page is not a substitute for Firestore security rules: authorization is enforced by Firebase, not by hiding the admin page.
-- The old client-side password check has been removed. If that previously committed password was reused anywhere else, change it there as well.
+- `vercel.json` configures the `/admin` rewrite, response security headers and static-asset caching.
+- Check the Vercel deployment status after each release.
 
 ## Maintenance checklist
 
-- Keep experience dates, role descriptions and education details accurate.
+- Keep role descriptions, dates, education and skills accurate.
 - Add TCS project work only after actual project allocation and delivery.
-- Add project screenshots, live demos and concise case studies when available.
-- Keep project links and certificates valid.
-- Re-test the contact form, admin inbox and password reset flow after changing Supabase Auth or RLS settings.
+- Keep project links, demos and certificate links valid.
+- Add project screenshots and concise case studies as they become available.
+- Re-test contact submission, admin sign-in, inbox actions and password reset after backend changes.
 - Check mobile layout, keyboard navigation and reduced-motion behavior before major releases.
+- Never commit secrets, credentials, private keys, tokens, logs or local environment files.
 
 ---
 
